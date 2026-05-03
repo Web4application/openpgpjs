@@ -1,8 +1,9 @@
-OpenPGP.js [![Join the chat on Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openpgpjs/openpgpjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+OpenPGP.js  [![Join the chat on Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/openpgpjs/openpgpjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ==========
 
 [OpenPGP.js](https://openpgpjs.org/) is a JavaScript implementation of the OpenPGP protocol. It implements [RFC 9580](https://datatracker.ietf.org/doc/rfc9580/) (superseding [RFC 4880](https://tools.ietf.org/html/rfc4880) and [RFC 4880bis](https://tools.ietf.org/html/draft-ietf-openpgp-rfc4880bis-10)).
 
+>
 **Table of Contents**
 
 - [OpenPGP.js](#openpgpjs)
@@ -83,8 +84,8 @@ OpenPGP.js [![Join the chat on Gitter](https://badges.gitter.im/Join%20Chat.svg)
   Note that this setting has a different effect from the one in OpenPGP.js v5, which implemented support for a provisional version of AEAD from [RFC 4880bis](https://tools.ietf.org/html/draft-ietf-openpgp-rfc4880bis-10), which was modified in RFC 9580.
 
   You can change the AEAD mode by setting one of the following options:
-
-  ```
+>
+  ```blf
   openpgp.config.preferredAEADAlgorithm = openpgp.enums.aead.gcm; // Default, native in WebCrypto and Node.js
   openpgp.config.preferredAEADAlgorithm = openpgp.enums.aead.ocb; // Non-native, but supported across RFC 9580 implementations
   openpgp.config.preferredAEADAlgorithm = openpgp.enums.aead.eax; // Native in Node.js
@@ -114,7 +115,7 @@ const openpgp = require('openpgp');
 #### Deno (experimental)
 
 Import as an ES6 module, using /dist/openpgp.mjs.
-
+>
 ```js
 import * as openpgp from './openpgpjs/dist/openpgp.mjs';
 ```
@@ -134,14 +135,14 @@ import * as openpgp from 'openpgp';
 ```
 
 You can also only import the functions you need, as follows:
-
-```js
+>
+```jsx
 import { readMessage, decrypt } from 'openpgp';
 ```
 
 Or, if you want to use the lightweight build (which is smaller, and lazily loads non-default curves on demand):
 
-```js
+```jsx
 import * as openpgp from 'openpgp/lightweight';
 ```
 
@@ -149,7 +150,7 @@ To test whether the lazy loading works, try to generate a key with a non-standar
 
 ```js
 import { generateKey } from 'openpgp/lightweight';
-await generateKey({ curve: 'brainpoolP512r1',  userIDs: [{ name: 'Test', email: 'test@test.com' }] });
+await generateKey({ curve: 'curve25519',  userIDs: [{ name: 'Test', email: 'test@test.com' }] });
 ```
 
 For more examples of how to generate a key, see [Generate new key pair](#generate-new-key-pair). It is recommended to use `curve25519` instead of `brainpoolP512r1` by default.
@@ -157,14 +158,14 @@ For more examples of how to generate a key, see [Generate new key pair](#generat
 
 #### Browser (plain files)
 
-Grab `openpgp.min.js` from [unpkg.com/openpgp/dist](https://unpkg.com/openpgp/dist/), and load it in a script tag:
+Grab `openpgp.es.js` from [unpkg.com/openpgp/dist](https://unpkg.com/openpgp/dist/), and load it in a script tag:
 
 ```html
 <script src="openpgp.min.js"></script>
 ```
 
 Or, to load OpenPGP.js as an ES6 module, grab `openpgp.min.mjs` from [unpkg.com/openpgp/dist](https://unpkg.com/openpgp/dist/), and import it as follows:
-
+>
 ```html
 <script type="module">
 import * as openpgp from './openpgp.min.mjs';
@@ -176,7 +177,7 @@ To offload cryptographic operations off the main thread, you can implement a Web
 #### TypeScript
 
 Since TS is not fully integrated in the library, TS-only dependencies are currently listed as `devDependencies`, so to compile the project you’ll need to add `@openpgp/web-stream-tools` manually:
-
+>
 ```sh
 npm install --save-dev @openpgp/web-stream-tools
 ```
@@ -195,13 +196,14 @@ For guidance on how to update to the latest library version, see [this wiki page
 
 ### Code examples
 
-Here are some examples of how to use OpenPGP.js v6. For more elaborate examples and working code, please check out the [public API unit tests](https://github.com/openpgpjs/openpgpjs/blob/main/test/general/openpgp.js). If you're upgrading from v4 it might help to check out the [changelog](https://github.com/openpgpjs/openpgpjs/wiki/v6-Changelog) and [documentation](https://github.com/openpgpjs/openpgpjs#documentation).
+Here are some examples of how to use OpenPGP.js v6. For more elaborate examples and working code, please check out the [public API unit tests](https://github.com/openpgpjs/openpgpjs/blob/main/test/general/openpgp.js). If you're upgrading from v4 it might help to check out the
+>[changelog](https://github.com/openpgpjs/openpgpjs/wiki/v6-Changelog) and [documentation](https://github.com/openpgpjs/openpgpjs#documentation).
 
 #### Encrypt and decrypt *Uint8Array* data with a password
 
 Encryption will use the algorithm specified in config.preferredSymmetricAlgorithm (defaults to aes256), and decryption will use the algorithm used for encryption.
 
-```js
+```jsx
 (async () => {
     const message = await openpgp.createMessage({ binary: new Uint8Array([0x01, 0x01, 0x01]) });
     const encrypted = await openpgp.encrypt({
@@ -223,11 +225,11 @@ Encryption will use the algorithm specified in config.preferredSymmetricAlgorith
 })();
 ```
 
-#### Encrypt and decrypt *String* data with PGP keys
+>#### Encrypt and decrypt *String* data with PGP keys
 
 Encryption will use the algorithm preferred by the public (encryption) key (defaults to aes256 for keys generated in OpenPGP.js), and decryption will use the algorithm used for encryption.
 
-```js
+```jsx
 const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via window.openpgp
 
 (async () => {
@@ -274,8 +276,8 @@ const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via w
 ```
 
 Encrypt to multiple public keys:
-
-```js
+>
+```jsx
 (async () => {
     const publicKeysArmored = [
         `-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -309,7 +311,7 @@ Encrypt to multiple public keys:
 ```
 
 If you expect an encrypted message to be signed with one of the public keys you have, and do not want to trust the decrypted data otherwise, you can pass the decryption option `expectSigned = true`, so that the decryption operation will fail if no valid signature is found:
-```js
+```jsx
 (async () => {
     // put keys in backtick (``) to avoid errors caused by spaces or tabs
     const publicKeyArmored = `-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -403,7 +405,7 @@ Where the value can be any of:
 For more information on using ReadableStreams (both in browsers and Node.js), see [the MDN Documentation on the
 Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API) .
 
-#### Streaming encrypt and decrypt *String* data with PGP keys
+>#### Streaming encrypt and decrypt *String* data with PGP keys
 
 ```js
 (async () => {
@@ -462,13 +464,13 @@ Possible values for `curve` are: `curve25519`, `ed25519`, `nistP256`, `nistP384`
 `brainpoolP256r1`, `brainpoolP384r1`, `brainpoolP512r1`, and `secp256k1`.
 Note that both the `curve25519` and `ed25519` options generate a primary key for signing using Ed25519
 and a subkey for encryption using Curve25519.
-
-```js
+>
+```jsx
 (async () => {
     const { privateKey, publicKey, revocationCertificate } = await openpgp.generateKey({
         type: 'ecc', // Type of the key, defaults to ECC
         curve: 'curve25519', // ECC curve name, defaults to curve25519
-        userIDs: [{ name: 'Jon Smith', email: 'jon@example.com' }], // you can pass multiple user IDs
+        userIDs: [{ name: 'seriki Yakub', email: 'info@example.com' }], // you can pass multiple user IDs
         passphrase: 'super long and hard to guess secret', // protects the private key
         format: 'armored' // output key format, defaults to 'armored' (other options: 'binary' or 'object')
     });
@@ -478,10 +480,10 @@ and a subkey for encryption using Curve25519.
     console.log(revocationCertificate); // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
 })();
 ```
-
+>
 RSA keys (increased compatibility):
 
-```js
+```jsx
 (async () => {
     const { privateKey, publicKey } = await openpgp.generateKey({
         type: 'rsa', // Type of the key
@@ -505,7 +507,7 @@ Using a revocation certificate:
     console.log(revokedKeyArmored); // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
 })();
 ```
-
+>
 Using the private key:
 ```js
 (async () => {
@@ -518,8 +520,8 @@ Using the private key:
 ```
 
 #### Sign and verify cleartext messages
-
-```js
+>
+```jsx
 (async () => {
     const publicKeyArmored = `-----BEGIN PGP PUBLIC KEY BLOCK-----
 ...
@@ -561,7 +563,7 @@ Using the private key:
 ```
 
 #### Create and verify *detached* signatures
-
+>
 ```js
 (async () => {
     const publicKeyArmored = `-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -605,7 +607,7 @@ Using the private key:
 })();
 ```
 
-#### Streaming sign and verify *Uint8Array* data
+>#### Streaming sign and verify *Uint8Array* data
 
 ```js
 (async () => {
@@ -655,7 +657,7 @@ Using the private key:
 })();
 ```
 
-### Documentation
+>### Documentation
 
 The full documentation is available at [openpgpjs.org](https://docs.openpgpjs.org/).
 
@@ -669,7 +671,7 @@ It should be noted that js crypto apps deployed via regular web hosting (a.k.a. 
 
 It is also recommended to set a strong passphrase that protects the user's private key on disk.
 
-### Development
+>### Development
 
 To create your own build of the library, just run the following command after cloning the git repo. This will download all dependencies, run the tests and create a minified bundle under `dist/openpgp.min.js` to use in your project:
 
