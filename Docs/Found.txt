@@ -1,0 +1,337 @@
+foundry-rs-up
+Repository navigation
+Code
+Pull requests
+3
+ (3)
+Agents
+foundry-rs-up
+/
+README.mdx
+in
+Main
+
+Edit
+
+Preview
+
+Show Diff
+Foundry banner
+ 
+
+Github Actions Telegram Chat Telegram Support Foundry
+
+Install | Docs | Developer Guidelines | Contributing | Crate Docs
+
+Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.
+Foundry consists of:
+
+Forge: Build, test, fuzz, debug and deploy Solidity contracts, like Hardhat, Brownie, Ape.
+Cast: A Swiss Army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+Anvil: Fast local Ethereum development node, akin to Hardhat Network, Tenderly.
+Chisel: Fast, utilitarian, and verbose Solidity REPL.
+Need help getting started with Foundry? Read the 📖 Foundry Docs!
+
+Demo
+
+Features
+High-Performance Compilation
+
+Fast and Flexible: Automatically detects and installs the required Solidity compiler version.
+Solidity and Vyper Support: Fully supports both Solidity and Vyper out-of-the-box.
+Incremental Compilation: Re-compiles only changed files, saving time.
+Parallelized Pipeline: Leverages multi-core systems for ultra-fast builds.
+Broad Compatibility: Supports non-standard directory structures, including Hardhat repos.
+Advanced Testing
+
+No Context Switching: Write tests directly in Solidity.
+Fuzz Testing: Quickly identify edge cases with input shrinking and counter-example generation.
+Invariant Testing: Ensure complex system properties hold across a wide range of inputs.
+Debugging Made Easy: Use forge-std's console.sol for flexible debug logging.
+Interactive Debugger: Step through your Solidity code with Foundry's interactive debugger, making it easy to pinpoint issues.
+Powerful Runtime Features
+
+RPC Forking: Fast and efficient remote RPC forking backed by Alloy.
+Lightweight & Portable: No dependency on Nix or other package managers for installation.
+Streamlined CI/CD
+
+Optimized CI: Accelerate builds, run tests and execute scripts using Foundry's GitHub action.
+Installation
+Getting started is very easy:
+
+Install foundryup:
+
+curl -L https://foundry.paradigm.xyz | bash
+Next, run foundryup.
+
+It will automatically install the latest version of the precompiled binaries: forge, cast, anvil, and chisel.
+
+foundryup
+Done!
+
+For additional details see the installation guide in the Foundry Docs.
+
+If you're experiencing any issues while installing, check out Getting Help and the FAQ.
+
+How Fast?
+Forge is quite fast at both compiling (leveraging solc with foundry-compilers) and testing.
+
+See the benchmarks below. Older benchmarks against DappTools can be found in the v0.2.0 announcement post and in the Convex Shutdown Simulation repository.
+
+Testing Benchmarks
+Project	Type	Forge 1.0	Forge 0.2	DappTools	Speedup
+vectorized/solady	Unit / Fuzz	0.9s	2.3s	-	2.6x
+morpho-org/morpho-blue	Invariant	0.7s	1m43s	-	147.1x
+morpho-org/morpho-blue-oracles	Integration (Cold)	6.1s	6.3s	-	1.04x
+morpho-org/morpho-blue-oracles	Integration (Cached)	0.6s	0.9s	-	1.50x
+transmissions11/solmate	Unit / Fuzz	2.7s	2.8s	6m34s	1.03x / 140.0x
+reflexer-labs/geb	Unit / Fuzz	0.2s	0.4s	23s	2.0x / 57.5x
+In the above benchmarks, compilation was always skipped
+
+Takeaway: Forge dramatically outperforms the competition, delivering blazing-fast execution speeds while continuously expanding its robust feature set.
+
+Compilation Benchmarks
+ 
+ 
+
+Takeaway: Forge compilation is consistently faster than Hardhat by a factor of 2.1x to 5.2x, depending on the amount of caching involved.
+
+Forge
+Forge helps you build, test, fuzz, debug and deploy Solidity contracts.
+
+The best way to understand Forge is to simply try it (in less than 30 seconds!).
+
+First, let's initialize a new counter example repository:
+
+forge init counter
+Next cd into counter and build:
+
+forge build
+[⠊] Compiling...
+[⠔] Compiling 27 files with Solc 0.8.28
+[⠒] Solc 0.8.28 finished in 452.13ms
+Compiler run successful!
+Let's test our contracts:
+
+forge test
+[⠊] Compiling...
+No files changed, compilation skipped
+
+Ran 2 tests for test/Counter.t.sol:CounterTest
+[PASS] testFuzz_SetNumber(uint256) (runs: 256, μ: 31121, ~: 31277)
+[PASS] test_Increment() (gas: 31293)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 5.35ms (4.86ms CPU time)
+
+Ran 1 test suite in 5.91ms (5.35ms CPU time): 2 tests passed, 0 failed, 0 skipped (2 total tests)
+Finally, let's run our deployment script:
+
+forge script script/Counter.s.sol
+[⠊] Compiling...
+No files changed, compilation skipped
+Script ran successfully.
+Gas used: 109037
+
+If you wish to simulate on-chain transactions pass a RPC URL.
+Run forge --help to explore the full list of available subcommands and their usage.
+
+More documentation can be found in the forge section of the Foundry Docs.
+
+Cast
+Cast is a Swiss Army knife for interacting with Ethereum applications from the command line.
+
+Here are a few examples of what you can do:
+
+Check the latest block on Ethereum Mainnet:
+
+cast block-number --rpc-url https://eth.merkle.io
+Check the Ether balance of vitalik.eth
+
+cast balance vitalik.eth --ether --rpc-url https://eth.merkle.io
+Replay and trace a transaction
+
+cast run 0x9c32042f5e997e27e67f82583839548eb19dc78c4769ad6218657c17f2a5ed31 --rpc-url https://eth.merkle.io
+Optionally, pass --etherscan-api-key <API_KEY> to decode transaction traces using verified source maps, providing more detailed and human-readable information.
+
+Run cast --help to explore the full list of available subcommands and their usage.
+
+More documentation can be found in the cast section of the Foundry Docs.
+
+Anvil
+Anvil is a fast local Ethereum development node.
+
+Let's fork Ethereum mainnet at the latest block:
+
+anvil --fork-url https://eth.merkle.io
+You can use those same cast subcommands against your anvil instance:
+
+cast block-number
+Run anvil --help to explore the full list of available features and their usage.
+
+More documentation can be found in the anvil section of the Foundry Docs.
+
+Chisel
+Chisel is a fast, utilitarian, and verbose Solidity REPL.
+
+To use Chisel, simply type chisel.
+
+chisel
+From here, start writing Solidity code! Chisel will offer verbose feedback on each input.
+
+Create a variable a and query it:
+
+➜ uint256 a = 123;
+➜ a
+Type: uint256
+├ Hex: 0x7b
+├ Hex (full word): 0x000000000000000000000000000000000000000000000000000000000000007b
+└ Decimal: 123
+Finally, run !source to see a was applied:
+
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.28;
+
+import {Vm} from "forge-std/Vm.sol";
+
+contract REPL {
+    Vm internal constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
+
+    /// @notice REPL contract entry point
+    function run() public {
+        uint256 a = 123;
+    }
+}
+Run chisel --help to explore the full list of available features and their usage.
+
+More documentation can be found in the chisel section of the Foundry Docs.
+
+Configuration
+Foundry is highly configurable, allowing you to tailor it to your needs. Configuration is managed via a file called foundry.toml located in the root of your project or any parent directory. For a full list of configuration options, refer to the config package documentation.
+
+You can find additional setup and configurations guides in the Foundry Docs and in the config crate:
+
+Configuring with foundry.toml
+Setting up VSCode
+Shell autocompletions
+Profiles and Namespaces
+
+Configuration can be organized into profiles, which are arbitrarily namespaced for flexibility.
+The default profile is named default. Learn more in the Default Profile section.
+To select a different profile, set the FOUNDRY_PROFILE environment variable.
+Override specific settings using environment variables prefixed with FOUNDRY_ (e.g., FOUNDRY_SRC).
+Contributing
+Contributions are welcome and highly appreciated. To get started, check out the contributing guidelines.
+
+If you want to contribute, or follow along with contributor discussion, you can use our main telegram to chat with us about the development of Foundry!
+
+Support
+Having trouble? See if the answer to your question can be found in the Foundry Docs.
+
+If the answer is not there:
+
+Join the support Telegram to get help, or
+Open an issue with the bug
+License
+Licensed under either of Apache License, Version 2.0 or MIT license at your option.
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in these crates by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+Acknowledgements
+Foundry is a clean-room rewrite of the testing framework DappTools. None of this would have been possible without the DappHub team's work over the years.
+Matthias Seitz: Created ethers-solc (now foundry-compilers) which is the backbone of our compilation pipeline, as well as countless contributions to ethers, in particular the abigen macros.
+Rohit Narurkar: Created the Rust Solidity version manager svm-rs which we use to auto-detect and manage multiple Solidity versions.
+Brock Elmore: For extending the VM's cheatcodes and implementing structured call tracing, a critical feature for debugging smart contract calls.
+Thank you to Depot for sponsoring`markdown` us with their fast GitHub runners and sccache, which we use in CI to reduce build and test times significantly.
+All the other contributors to the ethers-rs, alloy & foundry repositories and chatrooms.
+Usage: cast block-number [OPTIONS] [BLOCK]
+Arguments:
+ 
+ :[BLOCK]:
+          The hash or tag to query. If not specified, the latest number is
+          returned
+Options:
+  -h, --help
+          Print help (see a summary with '-h')
+  -j, --threads <THREADS>
+          Number of threads to use. Specifying 0 defaults to the number of
+          logical cores
+          
+          [aliases: --jobs]
+Rpc options:
+  -r, --rpc-url <URL>
+          The RPC endpoint, default value is http://localhost:8545
+          
+          [env: ETH_RPC_URL=]
+  -k, --insecure
+          Allow insecure RPC connections (accept invalid HTTPS certificates).
+          
+          When the provider's inner runtime transport variant is HTTP, this
+          configures the reqwest client to accept invalid certificates.
+      --no-proxy
+          Disable automatic proxy detection.
+          
+          Use this in sandboxed environments (e.g., Cursor IDE sandbox, macOS
+          App Sandbox) where system proxy detection causes crashes. When
+          enabled, HTTP_PROXY/HTTPS_PROXY environment variables and system proxy
+          settings will be ignored.
+      --flashbots
+          Use the Flashbots RPC URL with fast mode
+          ([https://rpc.flashbots.net/fast](https://rpc.flashbots.net/fast)).
+          
+          This shares the transaction privately with all registered builders.
+          
+          See:
+          [https://docs.flashbots.net/flashbots-protect/quick-start#faster-transactions](https://docs.flashbots.net/flashbots-protect/quick-start#faster-transactions)
+      --jwt-secret <JWT_SECRET>
+          JWT Secret for the RPC endpoint.
+          
+          The JWT secret will be used to create a JWT for a RPC. For example,
+          the following can be used to simulate a CL `engine_forkchoiceUpdated`
+          call:
+          
+          cast rpc --jwt-secret <JWT_SECRET> engine_forkchoiceUpdatedV2
+          '["0x6bb38c26db65749ab6e472080a3d20a2f35776494e72016d1e339593f21c59bc",
+          "0x6bb38c26db65749ab6e472080a3d20a2f35776494e72016d1e339593f21c59bc",
+          "0x6bb38c26db65749ab6e472080a3d20a2f35776494e72016d1e339593f21c59bc"]'
+          
+          [env: ETH_RPC_JWT_SECRET=]
+      --rpc-timeout <RPC_TIMEOUT>
+          Timeout for the RPC request in seconds.
+          
+          The specified timeout will be used to override the default timeout for
+          RPC requests.
+          
+          Default value: 45
+          
+          [env: ETH_RPC_TIMEOUT=]
+      --rpc-headers <RPC_HEADERS>
+          Specify custom headers for RPC requests
+          
+          [env: ETH_RPC_HEADERS=]
+      --curl
+          Print the equivalent curl command instead of making the RPC request
+Display options:
+      --color <COLOR>
+          The color of the log messages
+          Possible values:
+          - auto:   Intelligently guess whether to use color output (default)
+          - always: Force color output
+          - never:  Force disable color output
+      --json
+          Format log messages as JSON
+      --md
+          Format log messages as Markdown
+  -q, --quiet
+          Do not print log messages
+  -v, --verbosity...
+          Verbosity level of the log messages.
+          
+          Pass multiple times to increase the verbosity (e.g. -v, -vv, -vvv).
+          
+          Depending on the context the verbosity levels have different meanings.
+          
+          For example, the verbosity levels of the EVM are:
+          - 2 (-vv): Print logs for all tests.
+          - 3 (-vvv): Print execution traces for failing tests.
+          - 4 (-vvvv): Print execution traces for all tests, and setup traces
+          for failing tests.
+          - 5 (-vvvvv): Print execution and setup traces for all tests,
+          including storage changes and
+            backtraces with line numbers
