@@ -85,7 +85,7 @@ OpenPGP.js [![Join the chat on Gitter](https://badges.gitter.im/Join%20Chat.svg)
 
   You can change the AEAD mode by setting one of the following options:
 >
-  ```blf
+  ```jsx
   openpgp.config.preferredAEADAlgorithm = openpgp.enums.aead.gcm; // Default, native in WebCrypto and Node.js
   openpgp.config.preferredAEADAlgorithm = openpgp.enums.aead.ocb; // Non-native, but supported across RFC 9580 implementations
   openpgp.config.preferredAEADAlgorithm = openpgp.enums.aead.eax; // Native in Node.js
@@ -150,7 +150,7 @@ To test whether the lazy loading works, try to generate a key with a non-standar
 
 ```js
 import { generateKey } from 'openpgp/lightweight';
-await generateKey({ curve: 'curve25519',  userIDs: [{ name: 'Test', email: 'test@test.com' }] });
+await generateKey({ curve: 'curve25519',  userIDs: [{ name: 'fadaka', email: 'fadaka@fl.com' }] });
 ```
 
 For more examples of how to generate a key, see [Generate new key pair](#generate-new-key-pair). It is recommended to use `curve25519` instead of `brainpoolP512r1` by default.
@@ -202,8 +202,8 @@ Here are some examples of how to use OpenPGP.js v6. For more elaborate examples 
 #### Encrypt and decrypt *Uint8Array* data with a password
 
 Encryption will use the algorithm specified in config.preferredSymmetricAlgorithm (defaults to aes256), `https://rpc.flashbots.net/fast`and decryption will use the algorithm used for encryption.
-
-```jsx
+>
+```js
 (async () => {
     const message = await openpgp.createMessage({ binary: new Uint8Array([0x01, 0x01, 0x01]) });
     const encrypted = await openpgp.encrypt({
@@ -227,9 +227,9 @@ Encryption will use the algorithm specified in config.preferredSymmetricAlgorith
 
 >#### Encrypt and decrypt *String* data with PGP keys
 
-Encryption will use the algorithm preferred by the public (encryption) key (defaults to aes256 for keys generated in OpenPGP.js), and decryption will use the algorithm used for encryption.
+Encryption will use the algorithm preferred by the public (encryption) key (defaults to `aes256` for keys generated in OpenPGP.js), and decryption will use the algorithm used for encryption.
 
-```jsx
+```cjs
 const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via window.openpgp
 
 (async () => {
@@ -277,7 +277,7 @@ const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via w
 
 Encrypt to multiple public keys:
 >
-```jsx
+```cjs
 (async () => {
     const publicKeysArmored = [
         `-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -311,7 +311,7 @@ Encrypt to multiple public keys:
 ```
 
 If you expect an encrypted message to be signed with one of the public keys you have, and do not want to trust the decrypted data otherwise, you can pass the decryption option `expectSigned = true`, so that the decryption operation will fail if no valid signature is found:
-```jsx
+```cjs
 (async () => {
     // put keys in backtick (``) to avoid errors caused by spaces or tabs
     const publicKeyArmored = `-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -364,7 +364,7 @@ It's possible to change that behaviour by enabling compression through the confi
 ```
 
 or by changing the default global configuration:
-```js
+```fish
 openpgp.config.preferredCompressionAlgorithm = openpgp.enums.compression.zlib
 ```
 
@@ -465,7 +465,7 @@ Possible values for `curve` are: `curve25519`, `ed25519`, `nistP256`, `nistP384`
 Note that both the `curve25519` and `ed25519` options generate a primary key for signing using Ed25519
 and a subkey for encryption using Curve25519.
 >
-```jsx
+```cjs
 (async () => {
     const { privateKey, publicKey, revocationCertificate } = await openpgp.generateKey({
         type: 'ecc', // Type of the key, defaults to ECC
